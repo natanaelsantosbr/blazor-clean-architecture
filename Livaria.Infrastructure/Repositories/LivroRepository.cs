@@ -20,7 +20,7 @@ namespace Livaria.Infrastructure.Repositories
         }
         public async Task<Livro> AdicionarLivro(Livro livro)
         {
-            await _db.Livros.AddAsync(livro);
+            _db.Livros.Add(livro);
             await _db.SaveChangesAsync();
             return livro;
         }
