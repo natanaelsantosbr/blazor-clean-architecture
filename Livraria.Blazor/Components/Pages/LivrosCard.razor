@@ -8,13 +8,39 @@
             <p class="card-text">Lancamento: @Livro.Lancamento.ToShortDateString()</p>
             <div class="d-flex justify-content-between align-items-center mt-2">
                 <a href="/editaLivro/@Livro.LivroId" class="btn btn-primary">Editar</a>
+                <button @onclick="ConfirmarDialogo" class="btn btn-danger">Deletar</button>
             </div>
         </div>
     </div>
 </div>
 
+<DialogoComponent   Exibir="exibirDialog"
+                    OnCancel="CancelarExclusao"
+                    OnDelete="ConfirmarExclusao">
+<h3 style="color:red;font-weight:bold">Confirmar exclusão deste livro: Id=@Livro.LivroId</h3>
+</DialogoComponent>
+
 
 @code {
     [Parameter]
     public required Livro Livro { get; set; }
+
+    private bool exibirDialog;
+
+    private void ConfirmarDialogo()
+    {
+        exibirDialog = true;
+    }
+
+    private void CancelarExclusao()
+    {
+        exibirDialog = false;
+    }
+
+    private async Task ConfirmarExclusao()
+    {
+        await _livroRepository.DeletarLivro(Livro.LivroId);
+        exibirDialog = false;
+        navigation.NavigateTo("/livros");
+    }
 }
